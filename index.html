@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#151b2c">
+<title>Dompetku - Keuangan Pribadi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="mobile-overlay" id="overlay"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo">💰 Dompetku</div>
+    <button class="nav-link active" data-page="dashboard">🏠 Dashboard</button>
+    <button class="nav-link" data-page="transaksi">💸 Transaksi</button>
+    <button class="nav-link" data-page="tabungan">🏦 Tabungan</button>
+</div>
+
+<div class="main">
+
+    <div class="mobile-top">
+        <button id="menuBtn" class="menu-btn">☰</button>
+        <strong>💰 Dompetku</strong>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+        <div class="topbar">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Kelola keuanganmu dengan mudah ✨</p>
+            </div>
+            <button class="btn-primary" id="openTransaction1">+ Tambah Transaksi</button>
+        </div>
+
+        <div class="cards">
+            <div class="card saldo">
+                <div class="card-icon">💰</div>
+                <div><p>Saldo Saat Ini</p><h2 id="saldo">Rp 0</h2></div>
+            </div>
+            <div class="card masuk">
+                <div class="card-icon">📈</div>
+                <div><p>Total Pemasukan</p><h2 id="totalMasuk">Rp 0</h2></div>
+            </div>
+            <div class="card keluar">
+                <div class="card-icon">📉</div>
+                <div><p>Total Pengeluaran</p><h2 id="totalKeluar">Rp 0</h2></div>
+            </div>
+            <div class="card tabungan">
+                <div class="card-icon">🏦</div>
+                <div><p>Total Tabungan</p><h2 id="totalTabungan">Rp 0</h2></div>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-box">
+                <div class="section-title">
+                    <div><h2>Ringkasan Keuangan</h2><p>Perbandingan pemasukan dan pengeluaran</p></div>
+                </div>
+                <div class="finance-visual">
+                    <div class="donut" id="donut"><div><strong id="donutSaldo">Rp 0</strong><span>Saldo</span></div></div>
+                    <div class="legend">
+                        <div><i class="dot green"></i><span>Pemasukan</span><b id="legendMasuk">Rp 0</b></div>
+                        <div><i class="dot red"></i><span>Pengeluaran</span><b id="legendKeluar">Rp 0</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="section-title">
+                    <div><h2>Pengeluaran Kategori</h2><p>Kategori pengeluaranmu</p></div>
+                </div>
+                <div id="categoryChart" class="category-chart"></div>
+            </div>
+        </div>
+
+        <div class="table-box">
+            <div class="section-title">
+                <div><h2>Transaksi Terbaru</h2><p>5 transaksi terakhir</p></div>
+                <button class="lihat" data-page="transaksi">Lihat Semua →</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th></tr></thead>
+                    <tbody id="recentBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRANSAKSI -->
+    <section id="transaksi" class="page">
+        <div class="topbar">
+            <div><h1>Transaksi</h1><p>Kelola semua pemasukan dan pengeluaran</p></div>
+            <button class="btn-primary" id="openTransaction2">+ Tambah Transaksi</button>
+        </div>
+
+        <div class="table-box">
+            <div class="section-title">
+                <div><h2>Semua Transaksi</h2><p>Daftar transaksi keuangan kamu</p></div>
+            </div>
+            <div class="filter-row">
+                <input id="search" type="search" placeholder="🔎 Cari keterangan atau kategori...">
+                <select id="filter">
+                    <option value="semua">Semua Transaksi</option>
+                    <option value="masuk">Pemasukan</option>
+                    <option value="keluar">Pengeluaran</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>No</th><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr></thead>
+                    <tbody id="allBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABUNGAN -->
+    <section id="tabungan" class="page">
+        <div class="topbar">
+            <div><h1>Tabungan</h1><p>Catat dan pantau uang tabunganmu</p></div>
+        </div>
+
+        <div class="saving-card">
+            <div><p>Total Tabungan</p><h2 id="savingTotal">Rp 0</h2></div>
+            <div class="saving-icon">🏦</div>
+        </div>
+
+        <div class="form-box">
+            <h2>Tambah Tabungan</h2>
+            <p class="form-desc">Catat uang yang kamu simpan untuk tujuan tertentu.</p>
+            <form id="savingForm">
+                <div class="form-group"><label>Tanggal</label><input type="date" name="tanggal" id="savingDate" required></div>
+                <div class="form-group"><label>Keterangan</label><input type="text" name="keterangan" placeholder="Contoh: Tabungan bulan Oktober" required></div>
+                <div class="form-group"><label>Jumlah</label><input type="number" name="jumlah" min="1" placeholder="Contoh: 100000" required></div>
+                <button class="btn-primary" type="submit">💾 Simpan Tabungan</button>
+            </form>
+        </div>
+
+        <div class="table-box">
+            <div class="section-title"><div><h2>Riwayat Tabungan</h2><p>Daftar uang yang kamu simpan</p></div></div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>No</th><th>Tanggal</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr></thead>
+                    <tbody id="savingBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- MODAL TRANSAKSI -->
+<div class="modal" id="transactionModal">
+    <div class="modal-card">
+        <button class="close" data-close="transactionModal">×</button>
+        <h2>Tambah Transaksi</h2>
+        <p>Masukkan catatan keuanganmu.</p>
+        <form id="transactionForm">
+            <div class="form-group">
+                <label>Jenis</label>
+                <div class="type-buttons">
+                    <label><input type="radio" name="jenis" value="masuk" checked><span>📈 Pemasukan</span></label>
+                    <label><input type="radio" name="jenis" value="keluar"><span>📉 Pengeluaran</span></label>
+                </div>
+            </div>
+            <div class="form-group"><label>Tanggal</label><input type="date" name="tanggal" id="transactionDate" required></div>
+            <div class="form-group"><label>Kategori</label>
+                <select name="kategori" required>
+                    <option value="">Pilih kategori</option>
+                    <option>Gaji / Uang Saku</option><option>Makanan</option><option>Transportasi</option>
+                    <option>Belanja</option><option>Pendidikan</option><option>Hiburan</option>
+                    <option>Tagihan</option><option>Kesehatan</option><option>Lainnya</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Keterangan</label><input type="text" name="keterangan" placeholder="Contoh: Uang saku hari ini" required></div>
+            <div class="form-group"><label>Jumlah</label><input type="number" name="jumlah" min="1" placeholder="Contoh: 50000" required></div>
+            <button class="btn-primary full" type="submit">💾 Simpan Transaksi</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TX_KEY = "dompetku_tx_v2";
+const SAVE_KEY = "dompetku_save_v2";
+let tx = JSON.parse(localStorage.getItem(TX_KEY) || "[]");
+let saving = JSON.parse(localStorage.getItem(SAVE_KEY) || "[]");
+
+const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const today = () => new Date().toISOString().slice(0,10);
+const dateID = d => new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"2-digit",year:"numeric"}).format(new Date(d+"T00:00:00"));
+const esc = s => String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2);
+
+function saveData(){localStorage.setItem(TX_KEY,JSON.stringify(tx));localStorage.setItem(SAVE_KEY,JSON.stringify(saving));}
+function totals(){
+    const masuk=tx.filter(x=>x.jenis==="masuk").reduce((a,x)=>a+Number(x.jumlah),0);
+    const keluar=tx.filter(x=>x.jenis==="keluar").reduce((a,x)=>a+Number(x.jumlah),0);
+    const tab=saving.reduce((a,x)=>a+Number(x.jumlah),0);
+    return {masuk,keluar,tab,saldo:masuk-keluar};
+}
+function badge(j){return j==="masuk"?'<span class="badge masuk-badge">Pemasukan</span>':'<span class="badge keluar-badge">Pengeluaran</span>'}
+function render(){
+    const t=totals();
+    saldo.textContent=rupiah(t.saldo); totalMasuk.textContent=rupiah(t.masuk); totalKeluar.textContent=rupiah(t.keluar); totalTabungan.textContent=rupiah(t.tab);
+    savingTotal.textContent=rupiah(t.tab); donutSaldo.textContent=rupiah(t.saldo); legendMasuk.textContent=rupiah(t.masuk); legendKeluar.textContent=rupiah(t.keluar);
+    const total=t.masuk+t.keluar||1;
+    donut.style.background=`conic-gradient(#43a76f 0 ${(t.masuk/total)*100}%,#df6262 ${(t.masuk/total)*100}% 100%)`;
+
+    const cats={};
+    tx.filter(x=>x.jenis==="keluar").forEach(x=>cats[x.kategori]=(cats[x.kategori]||0)+Number(x.jumlah));
+    const arr=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const max=arr[0]?.[1]||1;
+    categoryChart.innerHTML=arr.length?arr.map(([name,val],i)=>`<div class="cat-row"><div class="cat-top"><span><i class="cat-dot c${i%5}"></i>${esc(name)}</span><b>${rupiah(val)}</b></div><div class="cat-track"><div style="width:${val/max*100}%"></div></div></div>`).join(""):'<div class="empty">Belum ada pengeluaran.</div>';
+
+    const recent=[...tx].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+    recentBody.innerHTML=recent.length?recent.map(x=>`<tr><td>${dateID(x.tanggal)}</td><td>${esc(x.kategori)}</td><td>${esc(x.keterangan)}</td><td>${badge(x.jenis)}</td><td class="${x.jenis==="masuk"?"text-masuk":"text-keluar"}">${x.jenis==="masuk"?"+":"-"} ${rupiah(x.jumlah)}</td></tr>`).join(""):'<tr><td colspan="5" class="empty">Belum ada transaksi.</td></tr>';
+    renderAll();
+    renderSaving();
+}
+function renderAll(){
+    const q=(search?.value||"").toLowerCase(), f=filter?.value||"semua";
+    const list=[...tx].sort((a,b)=>b.createdAt-a.createdAt).filter(x=>(f==="semua"||x.jenis===f)&&(`${x.keterangan} ${x.kategori}`).toLowerCase().includes(q));
+    allBody.innerHTML=list.length?list.map((x,i)=>`<tr><td>${i+1}</td><td>${dateID(x.tanggal)}</td><td>${badge(x.jenis)}</td><td>${esc(x.kategori)}</td><td>${esc(x.keterangan)}</td><td class="${x.jenis==="masuk"?"text-masuk":"text-keluar"}">${x.jenis==="masuk"?"+":"-"} ${rupiah(x.jumlah)}</td><td><button class="btn-delete" onclick="deleteTx('${x.id}')">Hapus</button></td></tr>`).join(""):'<tr><td colspan="7" class="empty">Belum ada transaksi.</td></tr>';
+}
+function renderSaving(){
+    const list=[...saving].sort((a,b)=>b.createdAt-a.createdAt);
+    savingBody.innerHTML=list.length?list.map((x,i)=>`<tr><td>${i+1}</td><td>${dateID(x.tanggal)}</td><td>${esc(x.keterangan)}</td><td class="text-masuk">+ ${rupiah(x.jumlah)}</td><td><button class="btn-delete" onclick="deleteSaving('${x.id}')">Hapus</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Belum ada tabungan.</td></tr>';
+}
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
+function openModal(){transactionModal.classList.add("show");transactionDate.value=today()}
+function closeModal(){transactionModal.classList.remove("show")}
+function go(page){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.getElementById(page).classList.add("active");
+    document.querySelectorAll(".nav-link").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+    sidebar.classList.remove("open");overlay.classList.remove("show");window.scrollTo(0,0);
+}
+
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
+openTransaction1.onclick=openModal; openTransaction2.onclick=openModal;
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModal);
+transactionModal.addEventListener("click",e=>{if(e.target===transactionModal)closeModal()});
+document.getElementById("transactionForm").onsubmit=e=>{
+    e.preventDefault(); const f=new FormData(e.target);
+    tx.push({id:uid(),jenis:f.get("jenis"),tanggal:f.get("tanggal"),kategori:f.get("kategori"),keterangan:f.get("keterangan"),jumlah:Number(f.get("jumlah")),createdAt:Date.now()});
+    saveData();e.target.reset();transactionDate.value=today();closeModal();render();showToast("Transaksi berhasil disimpan 💰");
+};
+document.getElementById("savingForm").onsubmit=e=>{
+    e.preventDefault();const f=new FormData(e.target);
+    saving.push({id:uid(),tanggal:f.get("tanggal"),keterangan:f.get("keterangan"),jumlah:Number(f.get("jumlah")),createdAt:Date.now()});
+    saveData();e.target.reset();savingDate.value=today();render();showToast("Tabungan berhasil disimpan 🏦");
+};
+search.addEventListener("input",renderAll);filter.addEventListener("change",renderAll);
+menuBtn.onclick=()=>{sidebar.classList.add("open");overlay.classList.add("show")};
+overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};
+window.deleteTx=id=>{if(confirm("Yakin ingin menghapus transaksi ini?")){tx=tx.filter(x=>x.id!==id);saveData();render();showToast("Transaksi dihapus.")}};
+window.deleteSaving=id=>{if(confirm("Yakin ingin menghapus tabungan ini?")){saving=saving.filter(x=>x.id!==id);saveData();render();showToast("Tabungan dihapus.")}};
+savingDate.value=today();transactionDate.value=today();render();
+</script>
+</body>
+</html>
